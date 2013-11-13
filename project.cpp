@@ -27,7 +27,7 @@ static float pointSize = 2.0;
 read_midi inputMidi;
 inputMidi.init();
 
-vector < unsigned char> keyvals; 
+vector < unsigned char > keyvals; 
 vector < float > xvector; 
 vector < float > yvector;
 
