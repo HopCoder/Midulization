@@ -87,10 +87,10 @@ void drawMe(void){
     glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
   }
   glEnd();
-  glBegin(GL_QUAD);
+  //glBegin(GL_QUAD);
 
 
-  glEnd();
+  //glEnd();
   
   glutSwapBuffers();
 
