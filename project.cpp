@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include "test.h"
 
 #define MAXVAL 127
 
@@ -23,6 +24,8 @@ static int isAnimate = 0;
 static int animateInterval = 50; //Time interval between frames.
 static float pointSize = 2.0;
 
+read_midi inputMidi;
+inputMidi.init();
 
 vector < unsigned char> keyvals; 
 vector < float > xvector; 
@@ -30,6 +33,9 @@ vector < float > yvector;
 
   
 void animate(int value){
+  
+  keyvales = inputMidi.get_array();
+
   /*if (isAnimate){
     xvector.push_back(0.0);
     yvector.push_back(0.0);
