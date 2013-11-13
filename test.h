@@ -94,12 +94,12 @@ void update_midi_array(double deltatime, std::vector<unsigned char> *message, vo
         if((int)message->at(0) == 128)
             midi_array_passer[(int)message->at(1)] = 0;
     }
-
+    /*
     for(int i = 24; i < midi_array_passer.size(); i++){
         std::cout << (int)midi_array_passer[i] << ' ';
     }
     std::cout << std::endl;
-    
+    */
 }
 
 bool read_midi::config(unsigned int i){
