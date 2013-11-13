@@ -27,7 +27,7 @@ static float pointSize = 3.0;
 read_midi inputMidi;
 
 
-vector < unsigned char> keyvals; 
+vector < unsigned char > keyvals; 
 vector < float > xvector; 
 vector < float > yvector;
 
