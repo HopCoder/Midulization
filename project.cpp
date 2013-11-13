@@ -55,15 +55,14 @@ void animate(int value){
       }
 
     if (sides > 25)
-      sides = 4;
+    sides = 4;
     else
-      sides++;
+    sides++;
     
-  }*/
+    }*/
 
-  if (isAnimate){
-   
-  }
+  keyvals = inputMidi.get_array();
+  
   glutTimerFunc(animateInterval, animate, 1);
   glutPostRedisplay();
 }
@@ -74,23 +73,38 @@ void drawMe(void){
 
   //glLoadIdentity();
   //glTranslatef(0.0, 0.0, -25.0);
-  
-  //glutWireTorus(3.0, 15.0, sides, 29 - sides);  
-  keyvals = inputMidi.get_array();
   glColor3f(0.0, 1.0, 0.0);
   
+  if (isAnimate) 
+    for (int i = 24; i < keyvals.size(); i++){
+      
+      glutSolidTorus(3.0, 15.0, 5, 5); 
+    }
+    
+  else 
+    {
+   
+      glBegin(GL_LINES);
+      for (int i = 24; i < keyvals.size(); i++){
+	glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
+	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      }
+      glEnd();
   
-  glBegin(GL_LINES);
-  for (int i = 24; i < keyvals.size(); i++){
-    glColor3f(0.0, 0.0, 1.0 * (i-24)/keyvals.size());
-    glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-    glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-  }
-  glEnd();
-  //glBegin(GL_QUAD);
+      glBegin(GL_QUADS);
+      glColor3f(1.0, 0.0, 1.0);
+      for (int i = 24; i < keyvals.size(); i++){
+	glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
+	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
+	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
+	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);	
+	
+      }
+      glEnd();
 
-
-  //glEnd();
+    }
   
   glutSwapBuffers();
 
@@ -99,7 +113,7 @@ void drawMe(void){
 
 void setup(void){
   glClearColor(1.0, 1.0 ,1.0, 0.0);
-  inputMidi.init();
+  inputMidi.init(1);
   //glEnable(GL_DEPTH_TEST);
 }
 

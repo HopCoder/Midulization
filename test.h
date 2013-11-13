@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include "RtMidi.h"
 
-std::vector<unsigned char> midi_array_passer(95, 0);
+std::vector<unsigned char> midi_array_passer(97, 0);
 
 class read_midi{
 public:
@@ -100,6 +100,7 @@ void update_midi_array(double deltatime, std::vector<unsigned char> *message, vo
     }
     std::cout << std::endl;
     */
+    
 }
 
 bool read_midi::config(unsigned int i){
