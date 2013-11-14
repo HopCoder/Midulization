@@ -10,7 +10,7 @@ echo building included .o files
 make > /dev/null
 cd ../.. > /dev/null
 echo building project
-make
+make build
 echo removing static libraries
 rm -rf rtmidi-2.0.1 > /dev/null
 echo build successfull
