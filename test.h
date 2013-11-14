@@ -20,6 +20,8 @@ public:
     bool init(unsigned int i);
     bool config(unsigned int i);
 
+    std::vector<std::vector<unsigned char> > get_on_keys();
+
     std::vector<unsigned char> get_array(){arr = midi_array_passer; return arr;}
 
 protected: 
@@ -83,6 +85,20 @@ void read_midi::init(){
 bool read_midi::init(unsigned int i){
     midiin = new RtMidiIn();
     return config(i);
+}
+
+std::vector<std::vector<unsigned char> > read_midi::get_on_keys(){
+    std::vector<std::vector<unsigned char> > returner;
+    std::vector<unsigned char> adder;
+    for(unsigned int i = 0; i < midi_array_passer.size(); i++){
+        if(midi_array_passer[i] != 0){
+            adder.clear();
+            adder.push_back(i);
+            adder.push_back(midi_array_passer[i]);
+            returner.push_back(adder);
+        }
+    }
+    return returner;
 }
 
 void update_midi_array(double deltatime, std::vector<unsigned char> *message, void *userData){
