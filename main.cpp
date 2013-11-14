@@ -1,5 +1,5 @@
 
-#include "test.h"
+#include "ReadMidi.h"
 
 int main(){
     read_midi test;

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
-#include "test.h"
+#include "ReadMidi.h"
 
 #define MAXVAL 127
 
