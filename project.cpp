@@ -70,7 +70,7 @@ void animate(int value){
 void drawMe(void){
   
   glClear(GL_COLOR_BUFFER_BIT);
-
+  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
   //glLoadIdentity();
   //glTranslatef(0.0, 0.0, -25.0);
   glColor3f(0.0, 1.0, 0.0);
@@ -85,17 +85,18 @@ void drawMe(void){
     {
    
       glBegin(GL_LINES);
+      glColor3f(0.0,1.0,0.0);
       for (int i = 24; i < keyvals.size(); i++){
-	glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
+	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
 	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
 	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
       }
       glEnd();
   
       glBegin(GL_QUADS);
-      glColor3f(1.0, 0.0, 1.0);
+      //glColor3f(1.0, 0.0, 1.0);
       for (int i = 24; i < keyvals.size(); i++){
-	glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
+	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
 	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
 	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
 	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);

@@ -6,6 +6,6 @@ cd tests
 make
 cd ../..
 make
-rm -rf rtmidi-2.0.1.tar.gz
+rm -rf rtmidi-2.0.1
 make
 
