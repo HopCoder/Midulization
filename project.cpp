@@ -18,94 +18,85 @@ using namespace std;
 
 //Globals
 static GLsizei width, height;
-static float warp = 0.2; //The amount of warpage in a given visualization
-static float up = 0.0; 
+//static float warp = 0.2; //The amount of warpage in a given visualization
+static int up = 0.0; 
+static int sides = 4;
 static int isAnimate = 0;
 static int animateInterval = 50; //Time interval between frames.
-static float pointSize = 3.0;
+//static float pointSize = 3.0;
 
 read_midi inputMidi;
 
 
 vector < unsigned char> keyvals; 
-vector < float > xvector; 
-vector < float > yvector;
+
+vector < unsigned char> torusvals;
 
   
 void animate(int value){
-  
-  
-
-  /*if (isAnimate){
-    xvector.push_back(0.0);
-    yvector.push_back(0.0);
-    for(int j = 0; j < xvector.size() - 1; j++){
-      xvector[j] = xvector[j] + warp;
-      if (yvector[j] > 0.0){
-	yvector[j] -= 0.5;
-      }
-      if (yvector[j] < 0.0)
-	yvector[j] = 0.0;
-
-      if (up >= 0.0){
-	yvector[j] += up;
-	up -= up/yvector.size();
-      }
-      
-      }
-
-    if (sides > 25)
-    sides = 4;
-    else
-    sides++;
-    
-    }*/
-
+  torusvals.clear();
   keyvals = inputMidi.get_array();
-  
+  if (isAnimate){
+    for (int i = 0; i < (int)keyvals.size(); i++){
+      if ((float)keyvals[i] > 0){
+	torusvals.push_back(keyvals[i]);
+      }
+    }
+    if (sides > 25)
+      up = 0;
+    else if (sides < 4)
+      up = 1;
+
+    if (up)
+      sides++;
+    else
+      sides--;
+  }
+
   glutTimerFunc(animateInterval, animate, 1);
   glutPostRedisplay();
 }
 
 void drawMe(void){
   
-  glClear(GL_COLOR_BUFFER_BIT);
-  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  //glLoadIdentity();
-  //glTranslatef(0.0, 0.0, -25.0);
-  glColor3f(0.0, 1.0, 0.0);
-  
-  if (isAnimate) 
-    for (int i = 24; i < keyvals.size(); i++){
-      
-      glutSolidTorus(3.0, 15.0, 5, 5); 
-    }
+  glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);  
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glLoadIdentity();
+  glTranslatef(0.0, 0.0, -1.00001);
+  if (isAnimate){
     
-  else 
-    {
-   
-      glBegin(GL_LINES);
-      glColor3f(0.0,1.0,0.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-      }
-      glEnd();
-  
-      glBegin(GL_QUADS);
-      //glColor3f(1.0, 0.0, 1.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);	
-	
-      }
-      glEnd();
-
+    
+    glColor3f(0.0, 1.0, 0.0);
+    //glutSolidTorus(40.0, 100.0, 20, sides);
+    //glutWireTorus(40.0, 30.0, 20, sides);
+    
+  }else {
+    
+    glBegin(GL_LINES);
+    for (int i = 24; i < (int)keyvals.size(); i++){
+      glColor3f(0.0, 1.0 * (i-24)/(float)keyvals.size(), 0.0);
+      glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      
     }
+    glEnd(); 
+    glBegin(GL_QUADS);
+    //glColor3f(1.0, 0.0, 1.0);
+    for (int i = 24; i < (int)keyvals.size(); i++){
+      glColor3f(0.0, 1.0 * (i-24)/(float)keyvals.size(), 0.0);
+      glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, -width / (keyvals.size()-24));
+      glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0 );
+      glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, -width / (keyvals.size()-24));
+
+      glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
+      glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
+      glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);		
+    }
+    glEnd();
+
+  }
   
   glutSwapBuffers();
 
@@ -114,8 +105,8 @@ void drawMe(void){
 
 void setup(void){
   glClearColor(1.0, 1.0 ,1.0, 0.0);
+  glEnable(GL_DEPTH_TEST);
   inputMidi.init(1);
-  //glEnable(GL_DEPTH_TEST);
 }
 
 void keyInput(unsigned char key, int x, int y)
@@ -126,13 +117,18 @@ void keyInput(unsigned char key, int x, int y)
       exit(0);
       break;
     case 'u':
-      up+=1.0;
       break;
     case ' ':
-      if(isAnimate)
+      if(isAnimate){
 	isAnimate = 0;
-      else 
+	//glLoadIdentity();
+	//glOrtho(0.0, (float)width, 0.0, (float)height, -1.0, 1.0);
+      }else{
 	isAnimate = 1;
+	//glLoadIdentity();
+	//glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
+	
+      }
       break;
     default:
       break;
@@ -151,10 +147,15 @@ void resize(int w, int h)
    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-
-   //glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
-   glOrtho(0.0, (float)w, 0.0, (float)h, -1.0, 1.0);
-   
+   glFrustum(0.0, (float)w, 0.0, (float)h, 1.0, 100.0);
+   //glFrustum(-(float)w, (float)w, -(float)h, (float)h, 1.0, 100.0);
+   /*
+   if (isAnimate){
+     glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
+   }else{
+     glOrtho(0.0, (float)w, 0.0, (float)h, -1.0, 1.0);
+   }
+   */
    width = w;
    height = h;
    glMatrixMode(GL_MODELVIEW);
@@ -168,7 +169,7 @@ int main (int argc, char** argv)
   glutInitDisplayMode(GLUT_SINGLE | GLUT_DOUBLE);
   glutInitWindowSize(500, 500);
   glutInitWindowPosition(100,100);
-  glutCreateWindow("GroovMe");
+  glutCreateWindow("Midulization");
   setup();
   glutDisplayFunc(drawMe);
   glutReshapeFunc(resize);

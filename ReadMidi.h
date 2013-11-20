@@ -10,6 +10,13 @@
 std::vector<unsigned char> midi_array_passer(97, 0);
 
 class read_midi{
+
+private:
+    std::vector<unsigned char> arr;
+    
+    RtMidiIn *midiin;
+
+
 public:
     read_midi();
     read_midi(unsigned int i);
@@ -26,11 +33,6 @@ public:
 
 protected: 
     //void update(double deltatime, std::vector <unsigned char> *message, void *userData);
-
-private:
-    std::vector<unsigned char> arr;
-    
-    RtMidiIn *midiin;
     
 
 };
