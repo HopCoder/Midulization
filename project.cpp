@@ -2,10 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
-<<<<<<< HEAD
-=======
 #include <math.h>
->>>>>>> Hopper
 #include "ReadMidi.h"
 
 #define MAXVAL 127
@@ -110,33 +107,14 @@ void drawMe(void){
     
   else 
     {
-<<<<<<< HEAD
-   
-      glBegin(GL_LINES);
-      glColor3f(0.0,1.0,0.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-=======
       amp.clear();
       phase_shift.clear();
       B.clear();
       for(unsigned int i = 0; i < on_keys.size(); i++){
           add_note(on_keys[i][0], on_keys[i][1]);
->>>>>>> Hopper
       }
 
       glBegin(GL_QUADS);
-<<<<<<< HEAD
-      //glColor3f(1.0, 0.0, 1.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);	
-=======
       glColor3f(1.0, 0.0, 0.0);
       for (int i = 0; i < keyvals.size(); i++){
 	    //glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
@@ -144,7 +122,6 @@ void drawMe(void){
 	    glVertex3f((i + 1) * width / (keyvals.size()), height/2, 0.0);
 	    glVertex3f((i) * width / (keyvals.size()), height/2, 0.0);
 	    glVertex3f((i) * width / (keyvals.size()), height/2 + height/2 * (get_height_scalar(i))/127.0, 0.0);	
->>>>>>> Hopper
 	
       }
       glEnd();
