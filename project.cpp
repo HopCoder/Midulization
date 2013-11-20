@@ -13,7 +13,7 @@
 #  include <GL/glut.h>
 #  include <GL/glext.h>
 #endif
-using namespace std;
+
 
 
 //Globals
@@ -28,9 +28,9 @@ static int animateInterval = 50; //Time interval between frames.
 read_midi inputMidi;
 
 
-vector < unsigned char> keyvals; 
+std::vector < unsigned char> keyvals; 
 
-vector < unsigned char> torusvals;
+std::vector < unsigned char> torusvals;
 
   
 void animate(int value){
@@ -138,7 +138,7 @@ void keyInput(unsigned char key, int x, int y)
 
 void disclaimer(void)
 {
-  cout << "This is a work in progress...\n";
+  std::cout << "This is a work in progress...\n";
 }
 
 // OpenGL window reshape routine.
