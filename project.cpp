@@ -2,9 +2,11 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <math.h>
 #include "ReadMidi.h"
 
 #define MAXVAL 127
+#define PI 3.14159
 
 #ifdef __APPLE__
 #  include <GLUT/glut.h>
@@ -13,7 +15,6 @@
 #  include <GL/glut.h>
 #  include <GL/glext.h>
 #endif
-using namespace std;
 
 
 //Globals
@@ -27,10 +28,27 @@ static float pointSize = 3.0;
 read_midi inputMidi;
 
 
-vector < unsigned char > keyvals; 
-vector < float > xvector; 
-vector < float > yvector;
+std::vector < unsigned char > keyvals; 
+std::vector < std::vector<unsigned char> > on_keys;
+std::vector < float > xvector; 
+std::vector < float > yvector;
+std::vector < float > amp;
+std::vector < float > phase_shift;
+std::vector < float > B;
 
+float get_height_scalar(int x){
+    float height = 0;
+    for(unsigned int i = 0; i < amp.size(); i++){
+        height += amp[i] * cos(B[i]*x-phase_shift[i]);
+    }  
+    return height;
+}
+
+void add_note(unsigned char x, unsigned char a){
+    amp.push_back((float) a);
+    B.push_back(PI/6);
+    phase_shift.push_back((x*PI/6));
+}
   
 void animate(int value){
   
@@ -62,7 +80,9 @@ void animate(int value){
     }*/
 
   keyvals = inputMidi.get_array();
-  
+  on_keys = inputMidi.get_on_keys();
+  if(on_keys.size()>0) std::cout << "test on keys " << on_keys[0][0] << ' ' << on_keys[0][1] << std::endl;
+
   glutTimerFunc(animateInterval, animate, 1);
   glutPostRedisplay();
 }
@@ -83,24 +103,21 @@ void drawMe(void){
     
   else 
     {
-   
-      glBegin(GL_LINES);
-      glColor3f(0.0,1.0,0.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
+      amp.clear();
+      phase_shift.clear();
+      B.clear();
+      for(unsigned int i = 0; i < on_keys.size(); i++){
+          add_note(on_keys[i][0], on_keys[i][1]);
       }
-      glEnd();
-  
+
       glBegin(GL_QUADS);
-      //glColor3f(1.0, 0.0, 1.0);
-      for (int i = 24; i < keyvals.size(); i++){
-	//glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 24) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 - height/2 * ((float)keyvals[i])/127.0, 0.0);
-	glVertex3f((i - 23) * width / (keyvals.size()-24), height/2 + height/2 * ((float)keyvals[i])/127.0, 0.0);	
+      glColor3f(1.0, 0.0, 0.0);
+      for (int i = 0; i < keyvals.size(); i++){
+	    //glColor3f(0.0, 0.0, 1.0 * (i-24)/(float)keyvals.size());
+	    glVertex3f((i - 1) * width / (keyvals.size()), height/2 + height/2 * (get_height_scalar(i))/127.0, 0.0);
+	    glVertex3f((i - 1) * width / (keyvals.size()), height/2, 0.0);
+	    glVertex3f((i) * width / (keyvals.size()), height/2, 0.0);
+	    glVertex3f((i) * width / (keyvals.size()), height/2 + height/2 * (get_height_scalar(i))/127.0, 0.0);	
 	
       }
       glEnd();
@@ -142,7 +159,7 @@ void keyInput(unsigned char key, int x, int y)
 
 void disclaimer(void)
 {
-  cout << "This is a work in progress...\n";
+    std::cout << "This is a work in progress...\n";
 }
 
 // OpenGL window reshape routine.
