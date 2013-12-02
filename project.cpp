@@ -25,19 +25,19 @@
 
 //Globals0
 static GLsizei width, height;
-static float warp = 0.2; //The amount of warpage in a given visualization
+//static float warp = 0.2; //The amount of warpage in a given visualization
 static float up = 0.0; 
 static int isAnimate = 0;
 static int animateInterval = 10; //Time interval between frames.
-static float pointSize = 3.0;
+//static float pointSize = 3.0;
 
 read_midi inputMidi;
 
 
 std::vector < unsigned char > keyvals; 
 std::vector < std::vector<unsigned char> > on_keys;
-std::vector < float > xvector; 
-std::vector < float > yvector;
+//std::vector < float > xvector; 
+//std::vector < float > yvector;
 std::vector < float > amp;
 std::vector < float > phase_shift;
 std::vector < float > B;
@@ -96,21 +96,19 @@ void drawMe(void){
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glLoadIdentity();
   glTranslatef(0.0, 0.0, -1.001);
-  //glRotatef(PI, 0.0, 1.0, 0.0); 
+  //glRotatef(PI, 0.0, 0.0, 0.0); 
   //glColor3f(1.0, 1.0, 1.0);
   
   if (isAnimate) 
-    for (int i = 24; i < keyvals.size(); i++){
-      
-      glutSolidTorus(3.0, 15.0, 5, 5); 
-      
-    }
+    gluLookAt(0.0, 0.0, 0.0, 
+	      0.0, 0.0, 0.0, 
+	      0.0, 1.0, 0.0);
     
   else 
     {
       
       glColor3f(1.0, 0.0, 0.0);
-      glBegin(GL_QUADS);
+      /*glBegin(GL_QUADS);
       for (float i = 0; i < width; i+=1){
 	    glVertex3f(( i + 1 ), 
 		   height/2.0 + height/2.0 *get_height_scalar(i)/127.0, 0.0);
@@ -120,6 +118,7 @@ void drawMe(void){
 	    glVertex3f( i , height/2.0 + height/2.0 * get_height_scalar(i)/127.0, 0.0);
       }
       glEnd();
+      */
       /*
       
       glColor3f(0.0, 1.0, 0.0);
@@ -196,7 +195,9 @@ void drawMe(void){
 	
       }*/
       glEnd();
-      //gluLookat(width/2, height/2, 0.0, 		width/2, height/2, 0.0,);
+      gluLookAt(0.0, height/2.0 + 50.0, 0.0,
+      		0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0);
 		
     }
   
@@ -219,7 +220,10 @@ void keyInput(unsigned char key, int x, int y)
       exit(0);
       break;
     case 'u':
-      up+=1.0;
+      up+=5.0;
+      break;
+    case 'j':
+      up-=5.0;
       break;
     case ' ':
       if(isAnimate)
