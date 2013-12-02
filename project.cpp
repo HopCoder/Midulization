@@ -112,12 +112,12 @@ void drawMe(void){
       glColor3f(1.0, 0.0, 0.0);
       glBegin(GL_QUADS);
       for (float i = 0; i < width; i+=1){
-	glVertex3f(( i + 1 ), 
+	    glVertex3f(( i + 1 ), 
 		   height/2.0 + height/2.0 *get_height_scalar(i)/127.0, 0.0);
-	glVertex3f(( i + 1 ), 
+	    glVertex3f(( i + 1 ), 
 		   height/2.0, 0.0);
-	glVertex3f( i, height/2.0, 0.0);
-	glVertex3f( i , height/2.0 + height/2.0 * get_height_scalar(i)/127.0, 0.0);
+	    glVertex3f( i, height/2.0, 0.0);
+	    glVertex3f( i , height/2.0 + height/2.0 * get_height_scalar(i)/127.0, 0.0);
       }
       glEnd();
       /*
@@ -176,12 +176,12 @@ void drawMe(void){
       std::list<std::vector<float> >::iterator it = frames.begin();
       for(unsigned int i = 0; i < frames.size(); i++){
         glColor4f(0.01 * (i), 0.0, 0.01*(100 - i),  2.0/(frames.size() - i));
-	float w = (frames.size() - i) * -0.1;
+	    float w = (frames.size() - i) * -0.1;
         for(unsigned int j = 0; j < it->size(); j++){
-	  glVertex3f((j*(width/500) + 1), (*it)[j], w);
-	  glVertex3f((j*(width/500) + 1), height/2.0, w );
-	  glVertex3f((j*(width/500)), height/2.0, w);
-	  glVertex3f((j*(width/500)), (*it)[j], w);	  
+	        glVertex3f((j*(width/500) + 1 - width/2.0), (*it)[j], w);
+	        glVertex3f((j*(width/500) + 1 - width/2.0), height/2.0, w );
+	        glVertex3f((j*(width/500) - width/2.0), height/2.0, w);
+	        glVertex3f((j*(width/500) - width/2.0), (*it)[j], w);	  
         }
         if(it == frames.end()) break;
         it++;
@@ -247,7 +247,7 @@ void resize(int w, int h)
 
    //glFrustum(-(float)w /2.0, (float)w /2.0, 
    //	     -(float)h /2.0, (float)h, 1.0, 50.0);
-   glFrustum(0.0, (float)w, 0.0, (float)h, 1.0, 50.0);
+   glFrustum(-(float)w/2.0, (float)w/2.0, 0.0, (float)h, 1.0, 50.0);
    //glOrtho(0.0, (float)w, 0.0, (float)h, -1.0, 1.0);
    
    width = w;
