@@ -7,34 +7,48 @@
 #include <cstdlib>
 #include "RtMidi.h"
 
+//This will be a global variable that will keep track of the keys pressed
+//and thier velocities
 std::vector<unsigned char> midi_array_passer(97, 0);
+
+
+/*
+ * THis class will serve as a wrapper for the RtMidi library, to grab
+ * the keys which are currently pressed and their velocities
+ */
 
 class read_midi{
 public:
+    //constructors
     read_midi();
     read_midi(unsigned int i);
 
+    //destructor
     ~read_midi();
 
+    //initialization functions
     void init();
     bool init(unsigned int i);
     bool config(unsigned int i);
 
+    //function to return a vector containing a vector of keys which are on, and
+    //their velocities
     std::vector<std::vector<unsigned char> > get_on_keys();
 
+    //function to return the array containing all of the keys currently on
     std::vector<unsigned char> get_array(){arr = midi_array_passer; return arr;}
 
-protected: 
-    //void update(double deltatime, std::vector <unsigned char> *message, void *userData);
-
 private:
+    //vector containing the velocities of keys located at the index
     std::vector<unsigned char> arr;
     
+    //RtMidiIn object
     RtMidiIn *midiin;
     
 
 };
 
+//constructors
 read_midi::read_midi() : midiin(0), arr(95, 0){
 
 }
@@ -44,6 +58,7 @@ read_midi::read_midi(unsigned int i) : midiin(0), arr(95, 0){
     init(i);
 }
 
+//initialization where ports are printed out to choose from
 void read_midi::init(){
     midiin = new RtMidiIn();
     std::string portName;
@@ -73,20 +88,13 @@ void read_midi::init(){
     config(i);
 }
 
-/*void read_midi::update(double deltatime, std::vector<unsigned char> *message, void *userData){
-    unsigned int nBytes = message->size();
-    for(unsigned int i = 0; i < nBytes; i++){
-        std::cout << "Byte " << i << " = " << (int)message->at(i) << ",  ";
-    }
-    if(nBytes > 0)
-        std::cout << "stamp = " << deltatime << std::endl;
-}*/
-
+//initialization when we know the port already
 bool read_midi::init(unsigned int i){
     midiin = new RtMidiIn();
     return config(i);
 }
 
+//returns the on keys
 std::vector<std::vector<unsigned char> > read_midi::get_on_keys(){
     std::vector<std::vector<unsigned char> > returner;
     std::vector<unsigned char> adder;
@@ -101,24 +109,18 @@ std::vector<std::vector<unsigned char> > read_midi::get_on_keys(){
     return returner;
 }
 
+//update the data that we have, this will be a callback function that we give
+//the midi object, which will be called every time we get a MIDI event
 void update_midi_array(double deltatime, std::vector<unsigned char> *message, void *userData){
     if(message->size() >= 3){
-        //if((int)message->at(0) == 145)
         if((int)message->at(0) == 144)
             midi_array_passer[(int)message->at(1)] = (unsigned char)message->at(2);
-        //if((int)message->at(0) == 129)
         if((int)message->at(0) == 128)
             midi_array_passer[(int)message->at(1)] = 0;
     }
-    /*
-    for(int i = 24; i < midi_array_passer.size(); i++){
-        std::cout << (int)midi_array_passer[i] << ' ';
-    }
-    std::cout << std::endl;
-    */
-    
 }
 
+//set all the configurations for the RtiMidi object
 bool read_midi::config(unsigned int i){
     midiin->openPort(i);
     midiin->setCallback( &update_midi_array );
@@ -126,6 +128,7 @@ bool read_midi::config(unsigned int i){
     return true;
 }
 
+//destructor; don't like memory leaks
 read_midi::~read_midi(){
     delete midiin;
 }
