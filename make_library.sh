@@ -10,7 +10,10 @@ echo building included .o files
 make > /dev/null
 cd ../.. > /dev/null
 echo building project
-make build
+case $( uname -s ) in
+Linux) make build;;
+    *) make build_mac;;
+esac
 echo removing static libraries
 rm -rf rtmidi-2.0.1 > /dev/null
 echo build successfull
