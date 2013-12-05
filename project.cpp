@@ -14,7 +14,7 @@
 //where x is the distance from C0
 #define FREQ(x) (15.43386241 * exp(0.05776226064 * (x)))
 
-#define ONE_MIDI 1
+//#define ONE_MIDI 1
 //#define DEBUGGING
 
 #ifdef __APPLE__
